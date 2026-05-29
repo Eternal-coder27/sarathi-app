@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['RIDER', 'DRIVER'], // It MUST be one of these two exact words
+    enum: ['YATRI', 'SARATHI'], // It MUST be one of these two exact words
     default: 'RIDER',
   },
   // The vehicle section is optional because Riders won't have it

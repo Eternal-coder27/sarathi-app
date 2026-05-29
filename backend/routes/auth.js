@@ -32,10 +32,26 @@ router.post('/register', async (req, res) => {
     });
 
     // Save to MongoDB
+    // Save to MongoDB
     await user.save();
-    res.status(201).json({ message: 'User registered successfully!' });
+
+    // 👇 NEW: Generate the digital VIP Pass right after they register!
+    const token = jwt.sign(
+      { userId: user._id, role: user.role }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '30d' }
+    );
+
+    // 👇 NEW: Send the token back so React doesn't crash!
+    res.status(201).json({ 
+      message: 'User registered successfully!',
+      token: token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    });
 
   } catch (error) {
+    // 👇 ADDED THIS LINE HERE 👇
+    console.log("CRASH DETAILS (REGISTER):", error); 
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
@@ -73,6 +89,8 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
+    // 👇 ADDED THIS LINE HERE 👇
+    console.log("CRASH DETAILS (LOGIN):", error); 
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
