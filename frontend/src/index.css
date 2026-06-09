@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* 🚗 Make the Leaflet map markers smoothly glide instead of jumping */
+.leaflet-marker-icon {
+  transition: transform 1s linear !important;
+}
