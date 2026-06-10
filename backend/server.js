@@ -32,6 +32,22 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("receiveDriverLocation", data);
   });
 
+  // 🔔 NEW: Listen for a Rider asking for a cab!
+  socket.on("requestRide", (rideDetails) => {
+    console.log(`🚕 New Ride Request to: ${rideDetails.dropoffLocation}`);
+    
+    // 📢 Broadcast this request to ALL connected drivers instantly
+    socket.broadcast.emit("incomingRideRequest", rideDetails);
+  });
+
+  // ✅ NEW: Listen for a driver accepting a ride
+  socket.on("acceptRide", (driverDetails) => {
+    console.log(`✅ Ride Accepted by: ${driverDetails.driverName}`);
+    
+    // 📢 Send the good news (and driver details) to the Rider!
+    socket.broadcast.emit("rideAccepted", driverDetails);
+  });
+
   // When a user closes the app or logs out
   socket.on("disconnect", () => {
     console.log(`❌ User disconnected: ${socket.id}`);
